@@ -20,6 +20,6 @@ The response from the successful create release api call.
       id: create_release
       uses: prethora/actions__create_release@v1.0
       with:
-        token: ${{secrets.GITHUB_TOKEN}}
+        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Get the response
       run: echo "The response: ${{ steps.create_release.outputs.response }}"
