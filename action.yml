@@ -1,0 +1,12 @@
+name: 'Create Release'
+description: 'Creates a release from a push with a tag reference'
+# inputs:
+#   token:
+#    description: 'Secret Github Token'
+#    required: true
+# outputs:
+#  time:
+#    description: 'The time we greeted you'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+CURRENT_SCRIPT_DIR_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PROJECT_DIR_PATH="$(cd "$CURRENT_SCRIPT_DIR_PATH/.." && pwd)"
+source "$CURRENT_SCRIPT_DIR_PATH/lib/pub.bash"
+source "$CURRENT_SCRIPT_DIR_PATH/lib/commons.bash"
+source "$CURRENT_SCRIPT_DIR_PATH/lib/git.bash"
+cd "$PROJECT_DIR_PATH"
+
+_processHelp "$@"
+
+YES=0
+_loadArgs "$@"
+
+validatePublishable
+
+VERSION="$(getPackageVersion)"
+VERSION_MINOR="$(getPackageVersionMinor)"
+VERSION_MAJOR="$(getPackageVersionMajor)"
+
+if [[ "$YES" == 1 ]] || confirm "Are you sure you want to publish version '$VERSION'?"; then
+    [[ "$YES" != 1 ]] && echo ""
+
+    printAction "./dev-bin/build"
+    ./dev-bin/build
+    [[ "$?" != 0 ]] && echo "fatal: \`./dev/build\` exited with code $?" && exit 1
+    echo
+
+    if isSaveable; then
+        ./dev-bin/save -y
+        [[ "$?" != 0 ]] && echo "fatal: \`./dev/save\` exited with code $?" && exit 1
+    fi
+
+    forceCreateTag "v$VERSION" "release v$VERSION"
+    forceCreateTag "v$VERSION_MINOR" "release v$VERSION_MINOR"
+    forceCreateTag "v$VERSION_MAJOR" "release v$VERSION_MAJOR"
+
+    printAction "git push -u origin +v$VERSION +v$VERSION_MINOR +v$VERSION_MAJOR"
+    git push -u origin +v$VERSION +v$VERSION_MINOR +v$VERSION_MAJOR
+    [[ "$?" != 0 ]] && echo "fatal: \`git push\` exited with code $?" && exit 1
+    echo
+fi
