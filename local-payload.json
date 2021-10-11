@@ -1,9 +1,9 @@
 {
-  "ref": "refs/tags/v1.0.0",
+  "ref": "refs/tags/v1.0.10",
   "repository": {
     "owner": {
       "name": "prethora"
     },
-    "name": "actions__create_release"
+    "name": "typescript__modules__quickstart_dom_playing"
   }
 }
