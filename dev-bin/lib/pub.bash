@@ -28,19 +28,13 @@ function _loadArgs
 {
     local ARGS=( "$@" )
     
-    extractFlag "-f" "--force" "|" "${ARGS[@]}"
-    FORCE="$EF_FLAG"
-    ARGS=( "${EF_REMAINING_ARGS[@]}" )
-
     extractFlag "-y" "--yes" "|" "${ARGS[@]}"
     YES="$EF_FLAG"
     ARGS=( "${EF_REMAINING_ARGS[@]}" )
 
-    if [[ "${#ARGS[@]}" -gt 1 ]]; then
-        echo "fatal: expecting at most 1 argument"
+    if [[ "${#ARGS[@]}" -gt 0 ]]; then
+        echo "fatal: expecting no arguments"
         exit 1
-    elif [[ "${#ARGS[@]}" == 1 ]]; then
-        MESSAGE="${ARGS[0]}"
     fi
 }
 
